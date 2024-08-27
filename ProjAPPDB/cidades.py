@@ -4,59 +4,56 @@ from banco import Banco
 
 class Cidades(object):
 
-    def __init__(self, idcidade=0, nome="", uf=""):
+    def __init__(self, idcidades=0, nome="", uf=""):
         self.info = {}
-        self.idcidade = idcidade
+        self.idcidades = idcidades
         self.nome = nome
         self.uf = uf
 
-    def insertUser(self):
+    def insertCid(self):
         banco = Banco()
         try:
             c = banco.conexao.cursor()
-            c.execute("insert into tbl_usuarios (nome, telefone, email, usuario, senha) values (?, ?, ?, ?, ?)",
-                      (self.nome, self.telefone, self.email, self.usuario, self.senha))
+            c.execute("insert into tbl_cidades (nome, uf) values (?, ?)",
+                      (self.nome, self.uf))
             banco.conexao.commit()
             c.close()
             return "Usuário cadastrado com sucesso!"
         except:
             return "Ocorreu um erro na inserção do usuário"
 
-    def updateUser(self):
+    def updateCid(self):
         banco = Banco()
         try:
             c = banco.conexao.cursor()
-            c.execute("update tbl_usuarios set nome = ?, telefone = ?, email = ?, usuario = ?, senha = ? where idusuario = ?",
-                      (self.nome, self.telefone, self.email, self.usuario, self.senha, self.idusuario))
+            c.execute("update tbl_cidades set nome = ?, uf = ?",
+                      (self.nome, self.uf))
             banco.conexao.commit()
             c.close()
             return "Usuário atualizado com sucesso!"
         except:
             return "Ocorreu um erro na alteração do usuário"
 
-    def deleteUser(self):
+    def deleteCid(self):
         banco = Banco()
         try:
             c = banco.conexao.cursor()
-            c.execute("delete from tbl_usuarios where idusuario = ?", (self.idusuario,))
+            c.execute("delete from tbl_cidades where idcidades = ?", (self.idcidades,))
             banco.conexao.commit()
             c.close()
             return "Usuário excluído com sucesso!"
         except:
             return "Ocorreu um erro na exclusão do usuário"
 
-    def selectUser(self, idusuario):
+    def selectCid(self, idcidades):
         banco = Banco()
         try:
             c = banco.conexao.cursor()
-            c.execute("select * from tbl_usuarios where idusuario = ?", (idusuario,))
+            c.execute("select * from tbl_cidades where idcidades = ?", (idcidades,))
             for linha in c:
                 self.idusuario = linha[0]
                 self.nome = linha[1]
-                self.telefone = linha[2]
-                self.email = linha[3]
-                self.usuario = linha[4]
-                self.senha = linha[5]
+                self.uf = linha[2]
             c.close()
             return "Busca feita com sucesso!"
         except:

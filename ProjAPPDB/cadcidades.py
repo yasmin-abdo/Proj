@@ -1,7 +1,7 @@
 import tkinter
 from tkinter import *
 
-class Usuario:
+class Cidades:
     def __init__(self,master=None):
         self.janela = Frame(master)
         self.fontepadrao = ("Arial", 14)
@@ -32,7 +32,7 @@ class Usuario:
         self.buscar["text"] = "Buscar"
         self.buscar["width"] = 10
         self.buscar.pack(side=LEFT)
-        #self.buscar["command"] = self.buscarUsuario  # BANCO DE DADOS
+        self.buscar["command"] = self.buscarCidades  # BANCO DE DADOS
 
 
     #NOME CIDADE
@@ -87,9 +87,19 @@ class Usuario:
         self.voltar["command"] = self.janela.quit
         self.voltar.pack(side=LEFT)
 
+        def buscarCidades(self):
+            user = Cidades()
+            idcidades = self.id.get()
+            self.idLabel["text"] = user.selectUser(idcidades)
+            self.id.delete(0, END)
+            self.id.insert(INSERT, user.idcidades)
+            self.nome.delete(0, END)
+            self.nome.insert(INSERT, user.nome)
+            self.uf.delete(0, END)
+            self.uf.insert(INSERT, user.uf)
 
 root = Tk()
-Usuario(root)
+Cidades(root)
 root.state("zoomed") #para a tela sempre aparecer maximizada
 root.mainloop()
 
