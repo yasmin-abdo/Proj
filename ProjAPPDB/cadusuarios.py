@@ -1,9 +1,10 @@
-import tkinter
 from tkinter import *
-import subprocess
+# import subprocess
+from usuarios import Usuarios
+
 
 class Usuario:
-    def __init__(self,master=None):
+    def __init__(self, master=None):
         self.janela = Frame(master)
         self.fontepadrao = ("Arial", 14)
         self.fontebotao = ("Calibri", 13)
@@ -17,7 +18,6 @@ class Usuario:
         self.titulo2["font"] = ("Calibri", "20", "italic")
         self.titulo2.pack()
 
-
     #IDUSUARIO
         self.janela2 = Frame(master)
         self.janela2["padx"] = 20
@@ -30,11 +30,11 @@ class Usuario:
         self.id["font"] = self.fontepadrao
         self.id.pack(side=LEFT)
 
-        self.botao = Button(self.janela2 , font=self.fontebotao)
-        self.botao["text"] = "Buscar"
-        self.botao["width"] = 10
-        self.botao.pack(side=LEFT)
-
+        self.buscar = Button(self.janela2, font=self.fontebotao)
+        self.buscar["text"] = "Buscar"
+        self.buscar["width"] = 10
+        self.buscar.pack(side=LEFT)
+        self.buscar["command"] = self.buscarUsuario  # BANCO DE DADOS
 
     #NOME
         self.janela3 = Frame(master)
@@ -48,7 +48,6 @@ class Usuario:
         self.nome["font"] = self.fontepadrao
         self.nome.pack(side=LEFT)
 
-
     #TELEFONE
         self.janela4 = Frame(master)
         self.janela4["padx"] = 20
@@ -60,7 +59,6 @@ class Usuario:
         self.tel["width"] = 30
         self.tel["font"] = self.fontepadrao
         self.tel.pack(side=LEFT)
-
 
     #EMAIL
         self.janela5 = Frame(master)
@@ -74,7 +72,6 @@ class Usuario:
         self.email["font"] = self.fontepadrao
         self.email.pack(side=LEFT)
 
-
     #USUARIO
         self.janela6 = Frame(master)
         self.janela6["padx"] = 20
@@ -86,7 +83,6 @@ class Usuario:
         self.usu["width"] = 30
         self.usu["font"] = self.fontepadrao
         self.usu.pack(side=LEFT)
-
 
     #SENHA
         self.janela7 = Frame(master)
@@ -101,8 +97,6 @@ class Usuario:
         self.senha["show"] = "*"  # pra não mostrar a senha
         self.senha.pack(side=LEFT)
 
-
-
     #BOTÕES
         self.janela8 = Frame(master)
         self.janela8["padx"] = 20
@@ -112,32 +106,91 @@ class Usuario:
         self.inserir["text"] = "Inserir"
         self.inserir["width"] = 10
         self.inserir.pack(side=LEFT)
+        self.inserir["command"] = self.inserirUsuario  # BANCO DE DADOS
 
         self.alt = Button(self.janela8, font=self.fontebotao)
         self.alt["text"] = "Alterar"
         self.alt["width"] = 10
         self.alt.pack(side=LEFT)
+        self.alt["command"] = self.alterarUsuario  # BANCO DE DADOS
+
+        self.excluir = Button(self.janela8, font=self.fontebotao)
+        self.excluir["text"] = "Excluir"
+        self.excluir["width"] = 10  # largura
+        self.excluir.pack(side=LEFT)
+        self.excluir["command"] = self.excluirUsuario  # BANCO DE DADOS
 
         self.voltar = Button(self.janela8, font=self.fontebotao)
         self.voltar["text"] = "Voltar"
         self.voltar["width"] = 10  # largura
-        self.voltar["command"] = self.abrir_principal
+        self.voltar["command"] = self.janela.quit
+    # ooouu self.voltar["command"] = self.abrir_principal
         self.voltar.pack(side=LEFT)
 
-        self.sair = Button(self.janela8, font=self.fontebotao)
-        self.sair["text"] = "Fechar"
-        self.sair["width"] = 10  # largura
-        self.sair["command"] = self.janela.quit
-        self.sair.pack(side=LEFT)
+    # def abrir_principal(self):
+        # subprocess.run(["python", "principal.py"])
 
-    def abrir_principal (self):
-        subprocess.run(["python", "principal.py"])
+    def buscarUsuario(self):
+        user = Usuarios()
+        idusuario = self.id.get()
+        self.idLabel["text"] = user.selectUser(idusuario)
+        self.id.delete(0, END)
+        self.id.insert(INSERT, user.idusuario)
+        self.nome.delete(0, END)
+        self.nome.insert(INSERT, user.nome)
+        self.tel.delete(0, END)
+        self.tel.insert(INSERT, user.telefone)
+        self.email.delete(0, END)
+        self.email.insert(INSERT, user.email)
+        self.usu.delete(0, END)
+        self.usu.insert(INSERT, user.usuario)
+        self.senha.delete(0, END)
+        self.senha.insert(INSERT, user.senha)
+
+    def inserirUsuario(self):
+        user = Usuarios()
+        user.nome = self.nome.get()
+        user.telefone = self.tel.get()
+        user.email = self.email.get()
+        user.usuario = self.usu.get()
+        user.senha = self.senha.get()
+        self.idLabel["text"] = user.insertUser()
+        self.id.delete(0, END)
+        self.nome.delete(0, END)
+        self.tel.delete(0, END)
+        self.email.delete(0, END)
+        self.usu.delete(0, END)
+        self.senha.delete(0, END)
+
+    def alterarUsuario(self):
+        user = Usuarios()
+        user.idusuario = self.id.get()
+        user.nome = self.nome.get()
+        user.telefone = self.tel.get()
+        user.email = self.email.get()
+        user.usuario = self.usu.get()
+        user.senha = self.senha.get()
+        self.idLabel["text"] = user.updateUser()
+        self.id.delete(0, END)
+        self.nome.delete(0, END)
+        self.tel.delete(0, END)
+        self.email.delete(0, END)
+        self.usu.delete(0, END)
+        self.senha.delete(0, END)
+
+    def excluirUsuario(self):
+        user = Usuarios()
+        user.idusuario = self.id.get()
+        self.idLabel["text"] = user.deleteUser()
+        self.id.delete(0, END)
+        self.nome.delete(0, END)
+        self.tel.delete(0, END)
+        self.email.delete(0, END)
+        self.usu.delete(0, END)
+        self.senha.delete(0, END)
 
 
 root = Tk()
 Usuario(root)
-root.state("zoomed") #para a tela sempre aparecer maximizada
+root.state("zoomed")  # para a tela sempre aparecer maximizada
 root.mainloop()
-
-
-
